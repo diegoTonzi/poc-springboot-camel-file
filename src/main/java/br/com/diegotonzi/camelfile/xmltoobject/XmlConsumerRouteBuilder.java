@@ -1,6 +1,7 @@
 package br.com.diegotonzi.camelfile.xmltoobject;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 
 import br.com.diegotonzi.camelfile.xmltoobject.vo.importer.credit.ret.RetCreditDocumentVO;
 import org.apache.camel.builder.RouteBuilder;
@@ -22,12 +23,6 @@ public class XmlConsumerRouteBuilder extends RouteBuilder {
     private static final String MOVE_ON_ERROR = ".error";
 
     public void configure() throws Exception {
-
-        JAXBContext jaxbContext = JAXBContext.newInstance(RetCreditDocumentVO.class);
-        JaxbDataFormat jaxb = new JaxbDataFormat(jaxbContext);
-        jaxb.setEncoding("UTF-16BE");
-
-        System.out.println("file://" + SOURCE_FOLDER);
         from("file:" + SOURCE_FOLDER +
                 "?delay=" + CONSUMER_DELAY +
                 "&readLock="+ CONSUMER_LOCK +
@@ -35,12 +30,18 @@ public class XmlConsumerRouteBuilder extends RouteBuilder {
                 "&move=" + MOVE_ON_SUCCESS +
                 "&moveFailed=" + MOVE_ON_ERROR)
                 .autoStartup(true)
-                .unmarshal(jaxb)
+                .unmarshal(getDataFormat())
                 .process(exchange -> {
                     RetCreditDocumentVO vo = exchange.getIn().getBody(RetCreditDocumentVO.class);
                     System.out.println("file name: " + vo.getBcarq().getFileName());
                 });
+    }
 
+    private JaxbDataFormat getDataFormat() throws JAXBException {
+        JAXBContext jaxbContext = JAXBContext.newInstance(RetCreditDocumentVO.class);
+        JaxbDataFormat jaxb = new JaxbDataFormat(JAXBContext.newInstance(RetCreditDocumentVO.class));
+        jaxb.setEncoding("UTF-16BE");
+        return jaxb;
     }
 
 }
