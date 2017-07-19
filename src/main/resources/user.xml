@@ -1,0 +1,10 @@
+<user>
+    <name>some name</name>
+    <age>999</age>
+    <address>
+        <street>some street</street>
+        <number>999</number>
+        <city>some city</city>
+        <state>some state</state>
+    </address>
+</user>
