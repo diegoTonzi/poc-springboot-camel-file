@@ -30,18 +30,23 @@ public class TxtRouteBuilder extends RouteBuilder {
 	 */
 	@Override
 	public void configure() throws Exception {
-		from("file:" + SOURCE_FOLDER +
-				 "?include=.*-RET." + FILE_EXTENSION +
-				 "&delay=" + CONSUMER_DELAY +
-			     "&readLock="+ CONSUMER_LOCK +
-			     "&readLockCheckInterval=" + CONSUMER_LOCK_INTERVAL +
-			     "&move=" + MOVE_ON_SUCCESS +
-			     "&moveFailed=" + MOVE_ON_ERROR)
+		from("file:" + getTarget())
 				.autoStartup(true)
 				.split(bodyAs(String.class).tokenize("\n"))
 				.streaming()
 				.parallelProcessing()
 				.process(txtProcessor);
+	}
+
+	private String getTarget(){
+		StringBuilder sb = new StringBuilder(SOURCE_FOLDER);
+		sb.append("?include=.*.").append(FILE_EXTENSION);
+		sb.append("&delay=").append(CONSUMER_DELAY);
+		sb.append("&readLock=").append(CONSUMER_LOCK);
+		sb.append("&readLockCheckInterval=").append(CONSUMER_LOCK_INTERVAL);
+		sb.append("&move=").append(MOVE_ON_SUCCESS);
+		sb.append("&moveFailed=").append(MOVE_ON_ERROR);
+		return sb.toString();
 	}
 
 }

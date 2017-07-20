@@ -30,19 +30,24 @@ public class XmlRouteBuilder extends RouteBuilder {
 	 */
 	@Override
 	public void configure() throws Exception {
-		from("file:" + SOURCE_FOLDER +
-			     "?include=.*." + FILE_EXTENSION +
-				 "&delay=" + CONSUMER_DELAY +
-			     "&readLock="+ CONSUMER_LOCK +
-			     "&readLockCheckInterval=" + CONSUMER_LOCK_INTERVAL +
-			     "&move=" + MOVE_ON_SUCCESS +
-			     "&moveFailed=" + MOVE_ON_ERROR)
+		from("file:" + getTarget())
 			.autoStartup(true)
 			.unmarshal(new JaxbDataFormat(JAXBContext.newInstance(User.class)))
 			.process(exchange -> {
 				User user = exchange.getIn().getBody(User.class);
 				System.out.println("file name: " + user.getName());
 			});
+	}
+
+	private String getTarget(){
+		StringBuilder sb = new StringBuilder(SOURCE_FOLDER);
+		sb.append("?include=.*.").append(FILE_EXTENSION);
+		sb.append("&delay=").append(CONSUMER_DELAY);
+		sb.append("&readLock=").append(CONSUMER_LOCK);
+		sb.append("&readLockCheckInterval=").append(CONSUMER_LOCK_INTERVAL);
+		sb.append("&move=").append(MOVE_ON_SUCCESS);
+		sb.append("&moveFailed=").append(MOVE_ON_ERROR);
+		return sb.toString();
 	}
 
 }
