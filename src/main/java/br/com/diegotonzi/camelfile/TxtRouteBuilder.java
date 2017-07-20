@@ -5,10 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * @author maz_dcosta
- * @version $Revision: $<br/>
- *          $Id: $
- * @since 19/07/17
+ * Created by diego on 20/07/17.
+ *
+ * Comel configuration to listen a target directory
  */
 @Component
 public class TxtRouteBuilder extends RouteBuilder {
@@ -24,6 +23,11 @@ public class TxtRouteBuilder extends RouteBuilder {
 	@Autowired
 	private TxtFileProcessor txtProcessor;
 
+	/**
+	 * When a file is moved, created or changed in the target directory,
+	 * the camel takes this file and split each line to be processed in parallel by {@link TxtFileProcessor}
+	 * @throws Exception
+	 */
 	@Override
 	public void configure() throws Exception {
 		from("file:" + SOURCE_FOLDER +

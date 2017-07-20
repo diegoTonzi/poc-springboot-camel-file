@@ -1,4 +1,4 @@
-package br.com.diegotonzi.camelfile;
+package br.com.diegotonzi.camelfile.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @XmlAccessorType(XmlAccessType.FIELD)
-public class AddressVo {
+public class Address {
 
 	@XmlElement(name = "street")
 	private String street;

@@ -1,15 +1,16 @@
-package br.com.diegotonzi.camelfile;
+package br.com.diegotonzi.camelfile.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
 import lombok.Data;
 
 @Data
 @XmlRootElement(name = "user")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class UserVo {
+public class User {
 
 	@XmlElement(name = "name")
 	private String name;
@@ -18,6 +19,6 @@ public class UserVo {
 	private Integer age;
 
 	@XmlElement(name = "address")
-	private AddressVo address;
+	private Address address;
 
 }

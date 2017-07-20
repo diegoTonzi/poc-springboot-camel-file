@@ -1,12 +1,15 @@
 package br.com.diegotonzi.camelfile;
 
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
+
+import br.com.diegotonzi.camelfile.model.User;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.converter.jaxb.JaxbDataFormat;
 import org.springframework.stereotype.Component;
 
 /**
+ * Created by diego on 20/07/17.
+ *
  * Comel configuration to listen a target directory
  */
 @Component
@@ -21,7 +24,8 @@ public class XmlRouteBuilder extends RouteBuilder {
 	private static final String MOVE_ON_ERROR = ".error";
 
 	/**
-	 * When a file is moved/created in the target directory, the camel takes this file, unmarshal the xml to an object
+	 * When a file is moved, created or changed in the target directory,
+	 * the camel takes this file and unmarshal the xml to an object using jaxb
 	 * @throws Exception
 	 */
 	@Override
@@ -34,16 +38,11 @@ public class XmlRouteBuilder extends RouteBuilder {
 			     "&move=" + MOVE_ON_SUCCESS +
 			     "&moveFailed=" + MOVE_ON_ERROR)
 			.autoStartup(true)
-			.unmarshal(getDataFormat())
+			.unmarshal(new JaxbDataFormat(JAXBContext.newInstance(User.class)))
 			.process(exchange -> {
-				UserVo user = exchange.getIn().getBody(UserVo.class);
+				User user = exchange.getIn().getBody(User.class);
 				System.out.println("file name: " + user.getName());
 			});
-	}
-
-	private JaxbDataFormat getDataFormat() throws JAXBException {
-		JaxbDataFormat jaxb = new JaxbDataFormat(JAXBContext.newInstance(UserVo.class));
-		return jaxb;
 	}
 
 }
