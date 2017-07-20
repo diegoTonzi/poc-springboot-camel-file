@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class XmlRouteBuilder extends RouteBuilder {
 
 	private static final String FILE_EXTENSION = "xml";
-	private static final String SOURCE_FOLDER = "/home/maz_dcosta/Documentos/zurique/pocs/files/" + FILE_EXTENSION;
+	private static final String SOURCE_FOLDER = "/home/diego/Documentos/pocs/files/" + FILE_EXTENSION;
 	private static final Integer CONSUMER_DELAY = 1000;
 	private static final String CONSUMER_LOCK = "rename";
 	private static final Integer CONSUMER_LOCK_INTERVAL = 1000;
